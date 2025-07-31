@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berlin/Chile <3</title>
+  <style>
+
+    @font-face {
+        font-family: NM;
+        src: url(HK.otf);
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ff9500;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      font-family: NM;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      width: 90vw;
+    }
+    .card {
+      background: #fff;
+      border: 1px #000 solid;
+      padding: 0;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    h2 {
+        border-bottom: #000 1px solid;
+        width: 100%;
+        padding-bottom: 1rem;
+    }
+
+    .time {
+      font-size: 3em;
+      border-bottom: #000 1px solid;
+      margin: 10px 0;
+    }
+    .weather {
+      font-size: 1.2em;
+      margin: 5px 0;
+    }
+    .temp {
+      font-size: 2em;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+        <div class="container">
+            <div class="card" id="santiago-card">
+                <h2>Santiago de Chile</h2>
+                <div class="time" id="time-santiago">--:--</div>
+                <div class="weather" id="weather-santiago">Loading weather...</div>
+                <div class="temp" id="temp-santiago"></div>
+            </div>
+            <div class="card" id="berlin-card">
+                <h2>Berlin</h2>
+                <div class="time" id="time-berlin">--:--</div>
+                <div class="weather" id="weather-berlin">Loading weather...</div>
+                <div class="temp" id="temp-berlin"></div>
+            </div>
+        </div>
+
+  <script>
+
+    const API_KEY = 'b5615f1a20df2c37589d6b31e3358cfd';
+
+    const CITY_IDS = {
+      santiago: 3874787,
+      berlin: 2950159
+    };
+
+    async function fetchWeather(cityId) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?id=${cityId}&units=metric&appid=${API_KEY}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch weather data');
+      return response.json();
+    }
+
+    function updateTime() {
+    const now = new Date();
+    const berlinOpts = {
+    hour:   '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Europe/Berlin'
+    };
+    const santiagoOpts = {
+    hour:   '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'America/Santiago'
+  };
+
+  document.getElementById('time-berlin')
+    .textContent = now.toLocaleTimeString('en-GB', berlinOpts);
+  document.getElementById('time-santiago')
+    .textContent = now.toLocaleTimeString('en-GB', santiagoOpts);
+}
+
+    async function updateWeather() {
+      try {
+        const santiagoData = await fetchWeather(CITY_IDS.santiago);
+        document.getElementById('weather-santiago').textContent = santiagoData.weather[0].description;
+        document.getElementById('temp-santiago').textContent = Math.round(santiagoData.main.temp) + '°C';
+
+        const berlinData = await fetchWeather(CITY_IDS.berlin);
+        document.getElementById('weather-berlin').textContent = berlinData.weather[0].description;
+        document.getElementById('temp-berlin').textContent = Math.round(berlinData.main.temp) + '°C';
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    updateTime();
+    setInterval(updateTime, 1000);      
+    updateWeather();
+    setInterval(updateWeather, 600000);    
+  </script>
+</body>
+</html>
