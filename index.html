@@ -93,13 +93,17 @@
     .weather {
       border-top: #000 1px solid;
       font-size: 1.2em;
-      padding: 5vw;
+      padding: 5vw 0 1vw 0;
       width: 100%;
       margin: 1rem;
     }
 
+    .icon {
+      filter: brightness(100) sepia(1) drop-shadow(0 0 40px rgb(255, 102, 0));
+    }
+
     .temp {
-      font-size: 2em;
+      font-size: 2.5em;
       font-weight: bold;
       margin: 5px 0;
     }
@@ -115,6 +119,7 @@
                   </div>
                 </div>
                 <div class="weather" id="weather-santiago">Loading weather...</div>
+                <img id="icon-santiago" class="icon" alt="" />
                 <div class="temp" id="temp-santiago"></div>
             </div>
             <div class="card" id="berlin-card">
@@ -123,6 +128,7 @@
                   <div class="time" id="time-berlin">--:--</div>
                 </div>
                 <div class="weather" id="weather-berlin">Loading weather...</div>
+                <img id="icon-berlin" class="icon" alt="" />
                 <div class="temp" id="temp-berlin"></div>
             </div>
         </div>
@@ -167,16 +173,25 @@
     async function updateWeather() {
       try {
         const santiagoData = await fetchWeather(CITY_IDS.santiago);
+        const iconCodeS = santiagoData.weather[0].icon;
+        document.getElementById('icon-santiago').src =
+      `https://openweathermap.org/img/wn/${iconCodeS}@2x.png`;
         document.getElementById('weather-santiago').textContent = santiagoData.weather[0].description;
         document.getElementById('temp-santiago').textContent = Math.round(santiagoData.main.temp) + '°C';
 
         const berlinData = await fetchWeather(CITY_IDS.berlin);
+    const iconCodeB = berlinData.weather[0].icon;
+    document.getElementById('icon-berlin').src =
+      `https://openweathermap.org/img/wn/${iconCodeB}@2x.png`;
         document.getElementById('weather-berlin').textContent = berlinData.weather[0].description;
         document.getElementById('temp-berlin').textContent = Math.round(berlinData.main.temp) + '°C';
       } catch (error) {
         console.error(error);
       }
     }
+
+   
+
 
     updateTime();
     setInterval(updateTime, 1000);      
