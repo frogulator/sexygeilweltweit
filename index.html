@@ -21,6 +21,15 @@
       padding: 0%;
     }
 
+    .bg {
+      position: absolute;
+      width: 20vw;
+      height: 100vh;
+      z-index: -10;
+      background-color: rgba(0, 0, 255, 0.396);
+      filter: blur(15vw) drop-shadow(5vw 5vw 30vw #0000004c);
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: #fffaf2;
@@ -111,9 +120,9 @@
       width: 100%;
     }
 
-    .icon {
-      filter: brightness(100) sepia(.5) drop-shadow(0 0 20vw #3c00ff);
-    }
+    /* .icon {
+      filter: brightness(100) sepia(.5) drop-shadow(0 0 1px #000000);
+    } */
 
     .temp {
       font-size: 2.5em;
@@ -123,6 +132,7 @@
   </style>
 </head>
 <body>
+  <div class="bg"></div>
         <div class="container">
             <div class="card" id="santiago-card">
                 <h2>santiago de chile</h2>
